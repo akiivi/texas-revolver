@@ -1,34 +1,37 @@
-
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>骗子酒馆德州模式（左轮版）</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Texas Revolver</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>骗子酒馆德州模式（左轮版）</h1>
-  <div class="board">
-    <div class="revolver-container">
-      <div class="revolver" id="revolver">
-        <div class="muzzle-indicator"></div>
-        <div class="pointer"></div>
-      </div>
+    <h1>Texas Revolver</h1>
+
+    <div class="revolver-container" id="revolver">
+        <!-- 8个弹巢 -->
+        <div class="chamber" data-index="0"></div>
+        <div class="chamber" data-index="1"></div>
+        <div class="chamber" data-index="2"></div>
+        <div class="chamber" data-index="3"></div>
+        <div class="chamber" data-index="4"></div>
+        <div class="chamber" data-index="5"></div>
+        <div class="chamber" data-index="6"></div>
+        <div class="chamber" data-index="7"></div>
     </div>
-    <div class="tray" id="tray"></div>
+
     <div class="controls">
-      <button class="btn success" onclick="addBullet()">➕ 添加子弹</button>
-      <button class="btn primary" onclick="shoot()">🔫 开枪</button>
-      <button class="btn info" onclick="removeBullets()">⏏ 退弹</button>
-      <button class="btn warn" onclick="allIn()">All in</button>
+        <button id="addBullet">加子弹</button>
+        <button id="allIn">All in</button>
+        <button id="fire">开火</button>
+        <button id="reset">刷新</button>
     </div>
-    <div class="message" id="message"></div>
-  </div>
-  <div class="top-right">
-    <button class="btn warn" onclick="restart()">🔄 重新开始</button>
-  </div>
-  <div class="bottom-left">清欢.制作</div>
-  <script src="script.js"></script>
+
+    <audio id="shootSound" src="sounds/shoot.mp3"></audio>
+    <audio id="reloadSound" src="sounds/reload.mp3"></audio>
+    <audio id="jamSound" src="sounds/jam.mp3"></audio>
+
+    <script src="script.js"></script>
 </body>
 </html>
