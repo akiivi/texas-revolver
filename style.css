@@ -56,3 +56,12 @@
     min-height: 40px;
     transition: font-size 0.2s;
 }
+
+/* 闪烁动画 */
+@keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0; }
+}
+.feedback.blink {
+    animation: blink 0.5s linear 2;
+}
