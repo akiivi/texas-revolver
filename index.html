@@ -1,22 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>俄罗斯轮盘</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 <div class="container">
-    <div id="rouletteContainer">
-        <div id="roulette" class="roulette">
-            <div class="chamber" data-index="0"></div>
-            <div class="chamber" data-index="1"></div>
-            <div class="chamber" data-index="2"></div>
-            <div class="chamber" data-index="3"></div>
-            <div class="chamber" data-index="4"></div>
-            <div class="chamber" data-index="5"></div>
-            <div class="chamber" data-index="6"></div>
-            <div class="chamber" data-index="7"></div>
-        </div>
-    </div>
-    <div id="feedback" class="feedback">提示信息</div>
-    <div class="controls">
-        <button id="loadBtn" class="btn">加子弹</button>
-        <button id="shootBtn" class="btn">开火</button>
-        <button id="allInBtn" class="btn">All in</button>
-        <button id="reloadBtn" class="btn">退弹</button>
-        <button id="resetBtn" class="btn">刷新</button>
-    </div>
+  <h1>俄罗斯轮盘</h1>
+  <div id="chambers">
+    <div class="chamber" data-index="0"></div>
+    <div class="chamber" data-index="1"></div>
+    <div class="chamber" data-index="2"></div>
+    <div class="chamber" data-index="3"></div>
+    <div class="chamber" data-index="4"></div>
+    <div class="chamber" data-index="5"></div>
+    <div class="chamber" data-index="6"></div>
+    <div class="chamber" data-index="7"></div>
+  </div>
+  <div class="buttons">
+    <button id="loadBtn">加子弹</button>
+    <button id="allInBtn">All in</button>
+    <button id="fireBtn">开火</button>
+    <button id="ejectBtn">退弹</button>
+  </div>
+  <div id="feedback">提示信息会显示在这里</div>
 </div>
+<script src="script.js"></script>
+</body>
+</html>
