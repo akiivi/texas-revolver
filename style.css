@@ -1,39 +1,58 @@
-body {
-    font-family: Arial, sans-serif;
+/* 容器自适应 */
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 10px;
     text-align: center;
-    background-color: #222;
-    color: #fff;
+    font-family: "微软雅黑", sans-serif;
 }
 
-h1 {
-    margin-top: 20px;
+/* 弹巢样式 */
+.chambers {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
 }
-
-.revolver-container {
-    width: 300px;
-    height: 300px;
-    margin: 40px auto;
-    border-radius: 50%;
-    position: relative;
-}
-
 .chamber {
-    width: 50px;
-    height: 50px;
-    background-color: #555;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    border: 2px solid #333;
     border-radius: 50%;
-    position: absolute;
-    transform-origin: center center;
-    transition: transform 0.5s ease, background-color 0.3s ease;
+    background-color: #eee;
+    display: inline-block;
+    transition: background-color 0.2s;
 }
 
+/* 活跃弹巢 */
 .chamber.active {
     background-color: red;
 }
 
-.controls button {
-    margin: 5px;
-    padding: 10px 20px;
+/* 按钮样式 */
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+}
+.buttons button {
+    flex: 1 1 40%;
+    min-width: 80px;
+    padding: 15px;
     font-size: 16px;
+    border-radius: 8px;
+    margin: 5px;
     cursor: pointer;
+}
+
+/* 反馈文字 */
+.feedback {
+    margin-top: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #ff3333;
+    min-height: 40px;
+    transition: font-size 0.2s;
 }
