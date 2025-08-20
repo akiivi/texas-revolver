@@ -1,130 +1,96 @@
 const chambers = document.querySelectorAll(".chamber");
-const roulette = document.getElementById("roulette");
 const feedback = document.getElementById("feedback");
 let bullets = 0;
 
-// 缓动函数
-function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
-
-// 更新弹巢显示
+// 更新弹巢状态
 function updateChambers() {
-    chambers.forEach((c, i) => {
-        c.classList.toggle("active", i < bullets);
-        c.classList.remove("flash");
-    });
+  chambers.forEach((ch, idx) => {
+    if (idx < bullets) ch.classList.add("loaded");
+    else ch.classList.remove("loaded");
+  });
 }
 
-// 提示显示
+// 弹巢闪烁
+function flashChamber(index) {
+  const ch = chambers[index];
+  ch.classList.add("flash");
+  setTimeout(() => ch.classList.remove("flash"), 800);
+}
+
+// 提示文字闪烁
 function showFeedback(msg) {
-    feedback.textContent = msg;
-    feedback.style.fontSize = "36px";
+  feedback.textContent = msg;
+  feedback.classList.add("flash");
+  setTimeout(() => feedback.classList.remove("flash"), 500);
 }
 
-// 轮盘闪烁动画
-function flashChambers(times, callback) {
-    let count = 0;
-    let interval = setInterval(() => {
-        let idx = Math.floor(Math.random() * 8);
-        chambers.forEach(c => c.classList.remove("flash"));
-        chambers[idx].classList.add("flash");
-        count++;
-        if (count >= times) {
-            clearInterval(interval);
-            callback();
-        }
-    }, 150);
-}
-
-// 开火动画 + 概率停靠
-function fireBullet() {
-    if (bullets === 0) { showFeedback("😎 哟，运气不错嘛"); return; }
-
-    let successProb = bullets / 8;
-    let jamProb = 0.08;
-
-    // 先随机闪烁 1~2 次
-    flashChambers(2, () => {
-        let r = Math.random();
-        let resultType = "empty";
-        if (r < jamProb) resultType = "jam";
-        else if (r < jamProb + successProb) resultType = "success";
-
-        // 根据结果计算停靠弹巢
-        let targetIndex;
-        if (resultType === "success") targetIndex = bullets - 1;
-        else targetIndex = Math.floor(Math.random() * 8);
-
-        let duration = 1800; // 动画时长
-        let spins = 3; // 旋转圈数
-        let start = null;
-
-        function step(timestamp) {
-            if (!start) start = timestamp;
-            let elapsed = timestamp - start;
-            let progress = Math.min(elapsed / duration, 1);
-            let eased = easeOutCubic(progress);
-            let rotation = 360 * spins * eased + (360 / 8) * targetIndex;
-            roulette.style.transform = `rotate(${rotation}deg)`;
-
-            // 中途随机闪烁
-            if (progress < 1) {
-                let flashIdx = Math.floor(Math.random() * 8);
-                chambers.forEach(c => c.classList.remove("flash"));
-                chambers[flashIdx].classList.add("flash");
-                requestAnimationFrame(step);
-            } else {
-                chambers.forEach(c => c.classList.remove("flash"));
-                chambers[targetIndex].classList.add("flash");
-
-                // 提示与动画
-                if (resultType === "success") {
-                    showFeedback("💥 爆炸！抱歉，你好像有点鼠了");
-                    bullets = 0;
-                    ejectAnimation();
-                } else if (resultType === "jam") showFeedback("⚠️ 这才是！运气王！");
-                else showFeedback("😎 哟，运气不错嘛");
-
-                updateChambers();
-            }
-        }
-        requestAnimationFrame(step);
-    });
-}
-
-// 退弹动画
-function ejectAnimation() {
-    feedback.textContent = "退弹中...";
-    setTimeout(() => { feedback.textContent = ""; }, 600);
-}
-
-// 按钮事件
-document.getElementById("shootBtn").addEventListener("click", fireBullet);
-
+// 加子弹
 document.getElementById("loadBtn").addEventListener("click", () => {
-    if (bullets < 8) {
-        bullets++;
-        updateChambers();
-        showFeedback(`当前子弹：${bullets}/8`);
-        if (bullets === 8) showFeedback("8/8，满满的！这是All in！");
-    } else showFeedback("子弹已加满，你这是All in！");
+  if (bullets < 8) {
+    bullets++;
+    updateChambers();
+    flashChamber(bullets - 1);
+    showFeedback(`当前子弹：${bullets}/8`);
+    if (bullets === 8) showFeedback("8/8，满满的！这是All in！");
+  } else showFeedback("子弹已加满，你这是All in！");
 });
 
+// All in
 document.getElementById("allInBtn").addEventListener("click", () => {
-    bullets = 8;
-    updateChambers();
-    showFeedback("8/8，满满的！");
+  bullets = 8;
+  updateChambers();
+  chambers.forEach((ch, idx) => {
+    setTimeout(() => flashChamber(idx), idx * 100);
+  });
+  showFeedback("8/8，满满的！");
 });
 
-document.getElementById("reloadBtn").addEventListener("click", () => {
-    if (bullets > 0) {
-        bullets = 0;
-        updateChambers();
-        ejectAnimation();
-    } else showFeedback("弹巢已空，无需退弹");
+// 开火逻辑
+document.getElementById("fireBtn").addEventListener("click", () => {
+  if (bullets === 0) {
+    showFeedback("哟，运气不错嘛");
+    return;
+  }
+
+  // 轮盘随机高亮闪烁
+  let flashTimes = Math.floor(Math.random() * 2) + 1; // 1~2次
+  let idx = bullets - 1;
+  let count = 0;
+  let flashInterval = setInterval(() => {
+    chambers[idx].classList.toggle("flash");
+    count++;
+    if (count >= flashTimes * 2) {
+      clearInterval(flashInterval);
+      chambers[idx].classList.remove("flash");
+      // 计算开火成功概率
+      let fireProb = bullets / 8;
+      let success = Math.random() < fireProb;
+      let jam = Math.random() < 0.08;
+      if (success && !jam) {
+        showFeedback("爆炸💥 抱歉，你好像有点鼠了");
+        ejectBullets();
+      } else if (!success && !jam) {
+        showFeedback("空弹 哟，运气不错嘛");
+      } else if (jam) {
+        showFeedback("卡壳 这才是！运气王！");
+        ejectBullets();
+      }
+    }
+  }, 200);
 });
 
-document.getElementById("resetBtn").addEventListener("click", () => {
-    bullets = 0;
-    updateChambers();
-    showFeedback("已刷新");
-});
+// 退弹
+document.getElementById("ejectBtn").addEventListener("click", ejectBullets);
+
+function ejectBullets() {
+  // 退弹动画
+  chambers.forEach((ch, idx) => {
+    if (ch.classList.contains("loaded")) {
+      ch.classList.add("flash");
+      setTimeout(() => ch.classList.remove("flash"), 200);
+    }
+  });
+  bullets = 0;
+  updateChambers();
+  showFeedback("已退弹");
+}
