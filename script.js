@@ -31,51 +31,60 @@ document.getElementById("loadBtn").addEventListener("click", () => {
     }
 });
 
-// 开火
+// 开火（带减速停转效果）
 document.getElementById("shootBtn").addEventListener("click", () => {
     if (bullets === 0) {
         showFeedback("哟，运气不错嘛");
         return;
     }
 
-    // 计算开火概率
     let successProbability = bullets / 8;
     let cardProbability = 0.08;
 
-    // 保存当前子弹索引，退弹为0
-    let finalIndex = Math.floor(Math.random() * 8); 
+    // 最终结果随机索引
+    let finalIndex = Math.floor(Math.random() * 8);
+    
+    // 随机决定结果类型
+    let r = Math.random();
+    let resultType = "empty"; // 默认空弹
+    if (r < cardProbability) resultType = "jam";       // 卡弹
+    else if (r < cardProbability + successProbability) resultType = "success"; // 成功
 
-    // 随机闪烁 1~2 秒
-    let flashCount = Math.floor(Math.random() * 2) + 2; 
+    // 闪烁减速模拟转轮
+    let totalFlashes = 20 + Math.floor(Math.random() * 10); // 闪烁次数
     let flashIndex = 0;
-    const flashInterval = setInterval(() => {
+    let intervalTime = 50;
+
+    function flashStep() {
         chambers.forEach(c => c.classList.remove("flash"));
         chambers[flashIndex].classList.add("flash");
-        flashIndex = (flashIndex + 1) % 8;
-        flashCount--;
-        if (flashCount <= 0) {
-            clearInterval(flashInterval);
 
-            // 判断开火结果
-            let r = Math.random();
-            if (r < cardProbability) {
-                // 卡弹
-                updateChambers(); // 全部退弹
-                showFeedback("这才是！运气王！");
-            } else if (r < cardProbability + successProbability) {
-                // 成功开火
-                updateChambers(); 
-                chambers[bullets - 1].classList.add("active"); // 停留红色
+        // 渐渐减速
+        intervalTime += 15;
+        flashIndex = (flashIndex + 1) % 8;
+        totalFlashes--;
+
+        if (totalFlashes > 0) {
+            setTimeout(flashStep, intervalTime);
+        } else {
+            // 最终停转
+            chambers.forEach(c => c.classList.remove("flash"));
+            updateChambers();
+
+            if (resultType === "success") {
+                chambers[bullets - 1].classList.add("active");
                 showFeedback("抱歉，你好像有点鼠了");
+            } else if (resultType === "jam") {
+                showFeedback("这才是！运气王！");
             } else {
-                // 空弹
-                updateChambers(); // 全部退弹
                 showFeedback("哟，运气不错嘛");
             }
-        }
-    }, 250);
 
-    bullets = 0; // 开火后清空子弹
+            bullets = 0; // 开火后清空子弹
+        }
+    }
+
+    flashStep();
 });
 
 // All in
