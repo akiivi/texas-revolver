@@ -1,63 +1,84 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: "Arial", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #111;
+    color: #fff;
+}
+
 .container {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 10px;
-    text-align: center;
-    font-family: "微软雅黑", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90vw;
+    max-width: 480px;
 }
 
 .chambers {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 20px 0;
+    margin-bottom: 20px;
 }
+
 .chamber {
     width: 40px;
     height: 40px;
     margin: 5px;
-    border: 2px solid #333;
+    background: gray;
     border-radius: 50%;
-    background-color: #eee;
-    display: inline-block;
-    transition: background-color 0.2s;
-}
-.chamber.active {
-    background-color: red;
-}
-.chamber.flash {
-    box-shadow: 0 0 15px 5px yellow;
+    transition: background 0.2s, transform 0.2s;
 }
 
-.buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 5px;
+.chamber.active {
+    background: red;
 }
-.buttons button {
-    flex: 1 1 40%;
-    min-width: 80px;
-    padding: 15px;
-    font-size: 16px;
-    border-radius: 8px;
-    margin: 5px;
-    cursor: pointer;
+
+.chamber.flash {
+    transform: scale(1.3);
+    background: yellow;
+    box-shadow: 0 0 10px yellow;
 }
 
 .feedback {
-    margin-top: 20px;
     font-size: 28px;
-    font-weight: bold;
-    color: #ff3333;
-    min-height: 40px;
-    transition: font-size 0.2s;
+    text-align: center;
+    margin-bottom: 20px;
+    transition: font-size 0.2s, color 0.2s;
+}
+
+.feedback.blink {
+    animation: blink 0.5s ease-in-out 2;
 }
 
 @keyframes blink {
-    0%, 50%, 100% { opacity: 1; }
-    25%, 75% { opacity: 0; }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }
-.feedback.blink {
-    animation: blink 0.5s linear 2;
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn {
+    padding: 12px 18px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background: #222;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn:active {
+    transform: scale(1.2);
+    box-shadow: 0 0 10px #fff;
 }
