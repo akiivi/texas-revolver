@@ -1,37 +1,32 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>德州扑克俄罗斯轮盘</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>德州轮盘</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>德州扑克俄罗斯轮盘</h1>
-        
-        <div id="chambers" class="chambers">
-            <div class="chamber"></div>
-            <div class="chamber"></div>
-            <div class="chamber"></div>
-            <div class="chamber"></div>
-            <div class="chamber"></div>
-            <div class="chamber"></div>
-            <div class="chamber"></div>
-            <div class="chamber"></div>
-        </div>
-
-        <div class="buttons">
-            <button id="loadBtn">加子弹</button>
-            <button id="shootBtn">开火</button>
-            <button id="allInBtn">All in</button>
-            <button id="reloadBtn">退弹</button>
-            <button id="resetBtn">刷新</button>
-        </div>
-
-        <div id="feedback" class="feedback">准备就绪</div>
+<div class="container">
+    <div id="chambers" class="chambers">
+        <div class="chamber"></div>
+        <div class="chamber"></div>
+        <div class="chamber"></div>
+        <div class="chamber"></div>
+        <div class="chamber"></div>
+        <div class="chamber"></div>
+        <div class="chamber"></div>
+        <div class="chamber"></div>
     </div>
-
-    <script src="script.js"></script>
+    <div id="feedback" class="feedback">提示信息</div>
+    <div class="controls">
+        <button id="loadBtn" class="btn">加子弹</button>
+        <button id="shootBtn" class="btn">开火</button>
+        <button id="allInBtn" class="btn">All in</button>
+        <button id="reloadBtn" class="btn">退弹</button>
+        <button id="resetBtn" class="btn">刷新</button>
+    </div>
+</div>
+<script src="script.js"></script>
 </body>
 </html>
