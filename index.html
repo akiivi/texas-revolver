@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>骗子酒馆德州模式（左轮版）</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>骗子酒馆德州模式（左轮版）</h1>
+  <div class="board">
+    <div class="revolver-container">
+      <div class="revolver" id="revolver">
+        <div class="muzzle-indicator"></div>
+        <div class="pointer"></div>
+      </div>
+    </div>
+    <div class="tray" id="tray"></div>
+    <div class="controls">
+      <button class="btn success" onclick="addBullet()">➕ 添加子弹</button>
+      <button class="btn primary" onclick="shoot()">🔫 开枪</button>
+      <button class="btn info" onclick="removeBullets()">⏏ 退弹</button>
+      <button class="btn warn" onclick="allIn()">All in</button>
+    </div>
+    <div class="message" id="message"></div>
+  </div>
+  <div class="top-right">
+    <button class="btn warn" onclick="restart()">🔄 重新开始</button>
+  </div>
+  <div class="bottom-left">清欢.制作</div>
+  <script src="script.js"></script>
+</body>
+</html>
