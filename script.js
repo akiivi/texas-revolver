@@ -1,58 +1,74 @@
 const chambers = document.querySelectorAll(".chamber");
 const feedback = document.getElementById("feedback");
-let bulletPos = 0; // 当前子弹位置
+let bullets = 0; // 当前子弹数量
 
-// 加子弹
+// 更新弹巢显示
+function updateChambers() {
+    chambers.forEach((c, i) => {
+        c.classList.toggle("active", i < bullets);
+    });
+}
+
+// 显示提示信息并闪烁
+function showFeedback(msg) {
+    feedback.textContent = msg;
+    feedback.style.fontSize = "36px";
+    feedback.classList.add("blink");
+    setTimeout(() => feedback.classList.remove("blink"), 1000);
+}
+
+// 加子弹按钮
 document.getElementById("loadBtn").addEventListener("click", () => {
-    bulletPos = 0; // 每次加子弹从0开始
-    chambers.forEach((c, i) => c.classList.toggle("active", i === 0));
-    feedback.style.fontSize = "36px";
-    feedback.textContent = "子弹已上膛";
+    if (bullets < 8) {
+        bullets++;
+        updateChambers();
+        if (bullets === 8) {
+            showFeedback(`8/8，满满的！这是All in！`);
+        } else {
+            showFeedback(`当前子弹：${bullets}/8`);
+        }
+    } else {
+        showFeedback(`子弹已加满，你这是All in！`);
+    }
 });
 
-// 开火
+// 开火按钮
 document.getElementById("shootBtn").addEventListener("click", () => {
-    shoot();
-});
+    if (bullets === 0) {
+        showFeedback("哟，运气不错嘛");
+        return;
+    }
+    // 新一局，退掉所有子弹
+    bullets = 0;
+    updateChambers();
 
-// All in
-document.getElementById("allInBtn").addEventListener("click", () => {
-    for (let i = 0; i < 8; i++) shoot();
-});
-
-// 退弹
-document.getElementById("reloadBtn").addEventListener("click", () => {
-    chambers.forEach(c => c.classList.remove("active"));
-    bulletPos = 0;
-    feedback.style.fontSize = "36px";
-    feedback.textContent = "弹巢已清空";
-});
-
-// 刷新
-document.getElementById("resetBtn").addEventListener("click", () => {
-    chambers.forEach(c => c.classList.remove("active"));
-    bulletPos = 0;
-    feedback.style.fontSize = "36px";
-    feedback.textContent = "已刷新";
-});
-
-// 开火逻辑
-function shoot() {
-    // 卡弹 8% 概率
+    // 8%概率卡弹
     if (Math.random() < 0.08) {
-        feedback.style.fontSize = "40px";
-        feedback.textContent = "卡弹！";
-        bulletPos = 0; // 自动退弹
-        chambers.forEach(c => c.classList.remove("active"));
+        showFeedback("这才是！运气王！");
         return;
     }
 
-    chambers.forEach(c => c.classList.remove("active"));
-    chambers[bulletPos].classList.add("active");
+    // 成功开火
+    showFeedback("抱歉，你好像有点鼠了");
+});
 
-    // 模拟开火
-    feedback.style.fontSize = "40px";
-    feedback.textContent = "爆炸！";
+// All in按钮
+document.getElementById("allInBtn").addEventListener("click", () => {
+    bullets = 8;
+    updateChambers();
+    showFeedback("8/8，满满的！");
+});
 
-    bulletPos = (bulletPos + 1) % 8; // 自动循环
-}
+// 退弹按钮
+document.getElementById("reloadBtn").addEventListener("click", () => {
+    bullets = 0;
+    updateChambers();
+    showFeedback("弹巢已清空");
+});
+
+// 刷新按钮
+document.getElementById("resetBtn").addEventListener("click", () => {
+    bullets = 0;
+    updateChambers();
+    showFeedback("已刷新");
+});
