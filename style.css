@@ -1,4 +1,3 @@
-/* 容器自适应 */
 .container {
     max-width: 500px;
     margin: 0 auto;
@@ -7,7 +6,6 @@
     font-family: "微软雅黑", sans-serif;
 }
 
-/* 弹巢样式 */
 .chambers {
     display: flex;
     flex-wrap: wrap;
@@ -24,13 +22,13 @@
     display: inline-block;
     transition: background-color 0.2s;
 }
-
-/* 活跃弹巢 */
 .chamber.active {
     background-color: red;
 }
+.chamber.flash {
+    box-shadow: 0 0 15px 5px yellow;
+}
 
-/* 按钮样式 */
 .buttons {
     display: flex;
     flex-wrap: wrap;
@@ -47,7 +45,6 @@
     cursor: pointer;
 }
 
-/* 反馈文字 */
 .feedback {
     margin-top: 20px;
     font-size: 28px;
@@ -57,7 +54,6 @@
     transition: font-size 0.2s;
 }
 
-/* 闪烁动画 */
 @keyframes blink {
     0%, 50%, 100% { opacity: 1; }
     25%, 75% { opacity: 0; }
