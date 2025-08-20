@@ -3,46 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>俄罗斯轮盘</title>
+<title>德州扑克轮盘</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="life-container">
-  <div id="life">
-    <span class="heart">❤️</span>
-    <span class="heart">❤️</span>
-    <span class="heart">❤️</span>
-    <span class="heart">❤️</span>
-    <span class="heart">❤️</span>
-    <span class="heart">❤️</span>
-    <span class="heart">❤️</span>
-    <span class="heart">❤️</span>
+  <div id="life-container">
+    <div id="hearts"></div>
+    <button id="healBtn">恢复生命值</button>
   </div>
-  <button id="healBtn">恢复生命值</button>
-</div>
 
-<div class="container">
-  <h1>俄罗斯轮盘</h1>
-  <div id="chambers">
-    <div class="chamber" data-index="0"></div>
-    <div class="chamber" data-index="1"></div>
-    <div class="chamber" data-index="2"></div>
-    <div class="chamber" data-index="3"></div>
-    <div class="chamber" data-index="4"></div>
-    <div class="chamber" data-index="5"></div>
-    <div class="chamber" data-index="6"></div>
-    <div class="chamber" data-index="7"></div>
+  <div id="roulette-container">
+    <div id="chambers">
+      <div class="chamber" data-index="0"></div>
+      <div class="chamber" data-index="1"></div>
+      <div class="chamber" data-index="2"></div>
+      <div class="chamber" data-index="3"></div>
+      <div class="chamber" data-index="4"></div>
+      <div class="chamber" data-index="5"></div>
+      <div class="chamber" data-index="6"></div>
+      <div class="chamber" data-index="7"></div>
+    </div>
   </div>
-  <div class="buttons">
-    <button id="loadBtn">加子弹</button>
+
+  <div id="controls">
+    <button id="addBulletBtn">加子弹</button>
     <button id="allInBtn">All in</button>
     <button id="fireBtn">开火</button>
     <button id="ejectBtn">退弹</button>
   </div>
-  <div id="feedback">提示信息会显示在这里</div>
-</div>
 
-<div class="footer">清欢.制作</div>
+  <div id="feedback"></div>
+  <div id="signature">清欢.制作</div>
 
 <script src="script.js"></script>
 </body>
