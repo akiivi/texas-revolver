@@ -8,9 +8,15 @@
 </head>
 <body>
   <div class="game-container">
+
     <!-- 生命值 -->
-    <div class="life-container" id="life"></div>
-    <button id="restoreLife" class="action-btn">恢复生命值</button>
+    <div class="life-container-wrapper">
+      <button id="decreaseLife" class="life-btn">-</button>
+      <div class="life-container" id="life"></div>
+      <span id="life-text" class="life-text"></span>
+      <button id="increaseLife" class="life-btn">+</button>
+      <button id="restoreLife" class="action-btn">恢复生命值</button>
+    </div>
 
     <!-- 子弹显示 -->
     <div class="ammo-display">
