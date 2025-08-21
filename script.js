@@ -1,126 +1,92 @@
 const chambers = document.querySelectorAll(".chamber");
 const message = document.getElementById("message");
-const addBtn = document.getElementById("add");
-const allInBtn = document.getElementById("all-in");
-const fireBtn = document.getElementById("fire");
-const ejectBtn = document.getElementById("eject");
-const resetBtn = document.getElementById("reset");
-const lifeSpan = document.getElementById("life");
-const restoreBtn = document.getElementById("restore-life");
 
-let bullets = [];
-let life = 8;
+let bullets = []; // 保存子弹位置
 
-// 初始化生命值
-function renderLife() {
-  lifeSpan.innerHTML = "❤".repeat(life) + "🤍".repeat(8 - life);
-}
-renderLife();
-
-// 添加子弹
-addBtn.addEventListener("click", () => {
-  if (bullets.length < 8) {
-    bullets.push(bullets.length);
-    chambers[bullets.length - 1].classList.add("bullet");
-    message.innerText = `已添加 ${bullets.length} 颗子弹`;
-  } else {
-    message.innerText = "子弹已加满，你这是All in！";
+// 加子弹
+document.getElementById("addBullet").addEventListener("click", () => {
+  if (bullets.length >= 8) {
+    const tips = [
+      "开火吧，交给运气",
+      "8/8，你这是All in",
+      "已经不能再添加咯"
+    ];
+    showMessage(tips[Math.floor(Math.random() * tips.length)]);
+    return;
   }
+  const nextSlot = bullets.length;
+  bullets.push(nextSlot);
+  chambers[nextSlot].classList.add("active");
+  showMessage(`子弹已添加：${bullets.length}/8`);
 });
 
 // All in
-allInBtn.addEventListener("click", () => {
-  bullets = [];
-  chambers.forEach(c => c.classList.remove("bullet"));
-  for (let i = 0; i < 8; i++) {
-    bullets.push(i);
-    chambers[i].classList.add("bullet");
+document.getElementById("allIn").addEventListener("click", () => {
+  if (bullets.length >= 8) {
+    const tips = [
+      "开火吧，交给运气",
+      "8/8，你这是All in",
+      "已经不能再添加咯"
+    ];
+    showMessage(tips[Math.floor(Math.random() * tips.length)]);
+    return;
   }
-  message.innerText = "8/8，满满的！";
+  for (let i = bullets.length; i < 8; i++) {
+    bullets.push(i);
+    chambers[i].classList.add("active");
+  }
+  showMessage("8/8，满满的！");
+});
+
+// 开火
+document.getElementById("fire").addEventListener("click", () => {
+  if (bullets.length === 0) {
+    showMessage("空仓，什么都没有发生！");
+    return;
+  }
+  // 计算概率
+  const successProb = bullets.length / 8;
+  const rand = Math.random();
+  if (rand < successProb * 0.92) {
+    // 开火成功
+    showMessage("💥 爆炸！抱歉，你好像有点鼠了");
+    setTimeout(ejectBullets, 1000); // 延迟退弹
+  } else if (rand < successProb) {
+    // 卡弹
+    showMessage("🔧 卡弹！这才是！运气王！");
+    setTimeout(ejectBullets, 1000);
+  } else {
+    // 空弹
+    showMessage("哟，运气不错嘛！");
+  }
 });
 
 // 退弹
-ejectBtn.addEventListener("click", () => {
-  bullets = [];
-  chambers.forEach(c => c.classList.remove("bullet"));
-  message.innerText = "所有子弹已退弹！";
-});
+document.getElementById("eject").addEventListener("click", ejectBullets);
 
-// 恢复生命值
-restoreBtn.addEventListener("click", () => {
-  life = 8;
-  renderLife();
-  message.innerText = "生命值已恢复！";
-});
-
-// 随机闪烁并停靠
-function spinAndStop(resultIndex, callback) {
-  let flashes = 12; // 随机闪烁次数
-  let current = 0;
-  const interval = setInterval(() => {
-    chambers.forEach(c => c.classList.remove("highlight"));
-    const idx = Math.floor(Math.random() * 8);
-    chambers[idx].classList.add("highlight");
-    current++;
-    if (current >= flashes) {
-      clearInterval(interval);
-      chambers.forEach(c => c.classList.remove("highlight"));
-      chambers[resultIndex].classList.add("highlight");
-      callback();
-    }
-  }, 150);
-}
-
-// 开火
-fireBtn.addEventListener("click", () => {
+function ejectBullets() {
   if (bullets.length === 0) {
-    message.innerText = "没有子弹，请先装填！";
+    showMessage("已经没有子弹了！");
     return;
   }
+  let duration = 1500; // 总时长 1.5秒
+  let interval = duration / bullets.length;
+  let i = 0;
 
-  const chance = bullets.length / 8;
-  const rand = Math.random();
-  let resultIndex = Math.floor(Math.random() * 8);
+  const ejectInterval = setInterval(() => {
+    if (i < bullets.length) {
+      chambers[bullets[i]].classList.remove("active");
+      chambers[bullets[i]].classList.add("emptying");
+      setTimeout(() => chambers[bullets[i]].classList.remove("emptying"), 500);
+      i++;
+    } else {
+      clearInterval(ejectInterval);
+      bullets = [];
+      showMessage("子弹已全部退出！");
+    }
+  }, interval);
+}
 
-  if (rand < 0.08) {
-    // 卡弹
-    spinAndStop(resultIndex, () => {
-      document.body.classList.add("flash-yellow");
-      message.innerText = "卡弹！这才是！运气王！";
-      setTimeout(() => {
-        document.body.classList.remove("flash-yellow");
-      }, 1000);
-    });
-  } else if (rand < 0.08 + chance) {
-    // 成功开火
-    const bulletIndex = bullets[Math.floor(Math.random() * bullets.length)];
-    resultIndex = bulletIndex;
-    spinAndStop(resultIndex, () => {
-      document.body.classList.add("flash-red");
-      message.innerText = "爆炸💥 抱歉，你好像有点鼠了";
-      life--;
-      renderLife();
-      setTimeout(() => {
-        document.body.classList.remove("flash-red");
-        ejectBtn.click(); // 延迟退弹
-        if (life <= 0) {
-          message.innerText = "生命值清零，游戏结束！";
-        }
-      }, 1000);
-    });
-  } else {
-    // 空枪
-    spinAndStop(resultIndex, () => {
-      document.body.classList.add("flash-green");
-      message.innerText = "空枪！哟，运气不错嘛";
-      setTimeout(() => {
-        document.body.classList.remove("flash-green");
-      }, 1000);
-    });
-  }
-});
-
-// 刷新
-resetBtn.addEventListener("click", () => {
-  location.reload();
-});
+function showMessage(text) {
+  message.innerText = text;
+}
