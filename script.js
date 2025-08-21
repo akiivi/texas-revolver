@@ -1,100 +1,126 @@
-let bullets = 0;
-let maxBullets = 8;
-let chambers = document.querySelectorAll(".chamber");
-let feedback = document.getElementById("feedback");
-let heartsContainer = document.getElementById("hearts");
+const chambers = document.querySelectorAll(".chamber");
+const message = document.getElementById("message");
+const addBtn = document.getElementById("add");
+const allInBtn = document.getElementById("all-in");
+const fireBtn = document.getElementById("fire");
+const ejectBtn = document.getElementById("eject");
+const resetBtn = document.getElementById("reset");
+const lifeSpan = document.getElementById("life");
+const restoreBtn = document.getElementById("restore-life");
+
+let bullets = [];
 let life = 8;
 
-function updateHearts() {
-  heartsContainer.innerHTML = '';
+// 初始化生命值
+function renderLife() {
+  lifeSpan.innerHTML = "❤".repeat(life) + "🤍".repeat(8 - life);
+}
+renderLife();
+
+// 添加子弹
+addBtn.addEventListener("click", () => {
+  if (bullets.length < 8) {
+    bullets.push(bullets.length);
+    chambers[bullets.length - 1].classList.add("bullet");
+    message.innerText = `已添加 ${bullets.length} 颗子弹`;
+  } else {
+    message.innerText = "子弹已加满，你这是All in！";
+  }
+});
+
+// All in
+allInBtn.addEventListener("click", () => {
+  bullets = [];
+  chambers.forEach(c => c.classList.remove("bullet"));
   for (let i = 0; i < 8; i++) {
-    let h = document.createElement("div");
-    h.className = "heart";
-    if (i >= life) h.classList.add("gray");
-    heartsContainer.appendChild(h);
+    bullets.push(i);
+    chambers[i].classList.add("bullet");
   }
-}
-
-updateHearts();
-
-document.getElementById("addBulletBtn").addEventListener("click", () => {
-  if (bullets < maxBullets) {
-    bullets++;
-    showFeedback(`子弹已添加: ${bullets}/${maxBullets}`, "#fff");
-  }
-  if (bullets === maxBullets) {
-    showFeedback(`8/8，满满的！`, "#ff69b4");
-  }
+  message.innerText = "8/8，满满的！";
 });
 
-document.getElementById("allInBtn").addEventListener("click", () => {
-  bullets = maxBullets;
-  showFeedback(`8/8，满满的！`, "#ff69b4");
+// 退弹
+ejectBtn.addEventListener("click", () => {
+  bullets = [];
+  chambers.forEach(c => c.classList.remove("bullet"));
+  message.innerText = "所有子弹已退弹！";
 });
 
-document.getElementById("ejectBtn").addEventListener("click", () => {
-  bullets = 0;
-  chambers.forEach(c => c.style.backgroundColor = "#555");
-  showFeedback("已退弹", "#fff");
-});
-
-document.getElementById("healBtn").addEventListener("click", () => {
+// 恢复生命值
+restoreBtn.addEventListener("click", () => {
   life = 8;
-  updateHearts();
-  showFeedback("生命值已恢复满", "#ff0000");
+  renderLife();
+  message.innerText = "生命值已恢复！";
 });
 
-function showFeedback(text, color) {
-  feedback.textContent = text;
-  feedback.style.color = color;
-  feedback.classList.add("flash");
-  setTimeout(() => feedback.classList.remove("flash"), 800);
+// 随机闪烁并停靠
+function spinAndStop(resultIndex, callback) {
+  let flashes = 12; // 随机闪烁次数
+  let current = 0;
+  const interval = setInterval(() => {
+    chambers.forEach(c => c.classList.remove("highlight"));
+    const idx = Math.floor(Math.random() * 8);
+    chambers[idx].classList.add("highlight");
+    current++;
+    if (current >= flashes) {
+      clearInterval(interval);
+      chambers.forEach(c => c.classList.remove("highlight"));
+      chambers[resultIndex].classList.add("highlight");
+      callback();
+    }
+  }, 150);
 }
 
-function loseLife() {
-  if (life > 0) life--;
-  updateHearts();
-  if (life === 0) showFeedback("生命值已清零！游戏结束！", "#ff0000");
-}
-
-function ejectBullets() {
-  bullets = 0;
-  chambers.forEach(c => c.style.backgroundColor = "#555");
-}
-
-document.getElementById("fireBtn").addEventListener("click", () => {
-  if (bullets === 0) {
-    showFeedback("哟，运气不错嘛", "#00ff00");
+// 开火
+fireBtn.addEventListener("click", () => {
+  if (bullets.length === 0) {
+    message.innerText = "没有子弹，请先装填！";
     return;
   }
 
-  let idx = bullets - 1;
-  let startTime = Date.now();
-  let flashDuration = 1500;
+  const chance = bullets.length / 8;
+  const rand = Math.random();
+  let resultIndex = Math.floor(Math.random() * 8);
 
-  let flashInterval = setInterval(() => {
-    chambers[idx].classList.toggle("flash");
-    if (Date.now() - startTime > flashDuration) {
-      clearInterval(flashInterval);
-      chambers[idx].classList.remove("flash");
+  if (rand < 0.08) {
+    // 卡弹
+    spinAndStop(resultIndex, () => {
+      document.body.classList.add("flash-yellow");
+      message.innerText = "卡弹！这才是！运气王！";
+      setTimeout(() => {
+        document.body.classList.remove("flash-yellow");
+      }, 1000);
+    });
+  } else if (rand < 0.08 + chance) {
+    // 成功开火
+    const bulletIndex = bullets[Math.floor(Math.random() * bullets.length)];
+    resultIndex = bulletIndex;
+    spinAndStop(resultIndex, () => {
+      document.body.classList.add("flash-red");
+      message.innerText = "爆炸💥 抱歉，你好像有点鼠了";
+      life--;
+      renderLife();
+      setTimeout(() => {
+        document.body.classList.remove("flash-red");
+        ejectBtn.click(); // 延迟退弹
+        if (life <= 0) {
+          message.innerText = "生命值清零，游戏结束！";
+        }
+      }, 1000);
+    });
+  } else {
+    // 空枪
+    spinAndStop(resultIndex, () => {
+      document.body.classList.add("flash-green");
+      message.innerText = "空枪！哟，运气不错嘛";
+      setTimeout(() => {
+        document.body.classList.remove("flash-green");
+      }, 1000);
+    });
+  }
+});
 
-      let fireProb = bullets / 8;
-      let success = Math.random() < fireProb;
-      let jam = Math.random() < 0.08;
-
-      if (success && !jam) {
-        chambers[idx].style.backgroundColor = "red";
-        showFeedback("爆炸💥 抱歉，你好像有点鼠了", "#ff0000");
-        loseLife();
-        setTimeout(() => ejectBullets(), 1000);
-      } else if (!success && !jam) {
-        chambers[idx].style.backgroundColor = "gray";
-        showFeedback("空弹 哟，运气不错嘛", "#00ff00");
-      } else if (jam) {
-        chambers[idx].style.backgroundColor = "yellow";
-        showFeedback("卡壳 这才是！运气王！", "#ffff00");
-        setTimeout(() => ejectBullets(), 1000);
-      }
-    }
-  }, 150);
+// 刷新
+resetBtn.addEventListener("click", () => {
+  location.reload();
 });
