@@ -1,3 +1,4 @@
+// 获取元素
 const ammoRow1 = document.getElementById("ammo-row1");
 const ammoRow2 = document.getElementById("ammo-row2");
 const message = document.getElementById("message");
@@ -5,7 +6,7 @@ const bulletCountText = document.getElementById("bullet-count");
 const lifeContainer = document.getElementById("life");
 
 let bullets = 0;
-let maxBullets = 8;
+const maxBullets = 8;
 let lives = 8;
 
 // 初始化子弹槽
@@ -21,12 +22,18 @@ initAmmo();
 
 // 初始化生命值
 function renderLife() {
-  lifeSpan.innerHTML = "❤".repeat(life) + "🤍".repeat(8 - life);
+  lifeContainer.innerHTML = "";
+  for (let i = 0; i < 8; i++) {
+    if (i < lives) {
+      lifeContainer.innerHTML += `<img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="red heart">`;
+    } else {
+      lifeContainer.innerHTML += `<img src="https://cdn-icons-png.flaticon.com/512/833/833379.png" alt="gray heart">`;
+    }
+  }
 }
 renderLife();
 
-
-// 更新子弹槽
+// 更新子弹槽显示
 function updateAmmo() {
   for (let i = 0; i < 8; i++) {
     const slot = document.getElementById(`slot${i}`);
@@ -36,7 +43,7 @@ function updateAmmo() {
   bulletCountText.textContent = `当前子弹：${bullets}/8`;
 }
 
-// 提示显示
+// 提示信息
 function showMessage(text, color="white") {
   message.style.color = color;
   message.textContent = text;
@@ -48,14 +55,15 @@ function tryRestoreLife() {
   if (Math.random() < 0.01 && lives < 8) {
     lives++;
     renderLife();
-    showMessage("恭喜！触发小彩蛋，恢复1点生命值", "lightgreen");
+    showMessage("恭喜触发小彩蛋，恢复一点生命值", "lightgreen");
   }
 }
 
 // 退弹动画
 function ejectAnimation() {
   let current = bullets;
-  let step = 1000 / current;
+  if (current === 0) return;
+  const step = 1500 / current;
   for (let i = 0; i < current; i++) {
     setTimeout(() => {
       bullets--;
@@ -64,7 +72,7 @@ function ejectAnimation() {
   }
 }
 
-// 点击加子弹
+// 添加子弹
 document.getElementById("addBullet").onclick = () => {
   tryRestoreLife();
   if (bullets < maxBullets) {
@@ -72,7 +80,7 @@ document.getElementById("addBullet").onclick = () => {
     updateAmmo();
     showMessage(`子弹+1，当前：${bullets}/8`, "lightblue");
   } else {
-    let tips = ["开火交给运气吧", "8/8，你这是All in", "已经不能再添加咯"];
+    const tips = ["开火交给运气吧", "8/8，你这是All in", "已经不能再添加咯"];
     showMessage(tips[Math.floor(Math.random() * tips.length)], "orange");
   }
 };
@@ -85,7 +93,7 @@ document.getElementById("allIn").onclick = () => {
   showMessage("8/8，满满的！", "orange");
 };
 
-// 开火
+// 开火逻辑
 document.getElementById("fire").onclick = () => {
   tryRestoreLife();
   if (bullets === 0) {
@@ -93,28 +101,38 @@ document.getElementById("fire").onclick = () => {
     return;
   }
 
-  let slots = Array.from({length: 8}, (_, i) => document.getElementById(`slot${i}`));
-  slots.forEach(s => s.classList.add("highlight"));
+  const slots = Array.from({length: 8}, (_, i) => document.getElementById(`slot${i}`));
+  
+  // 开火闪烁动画 1.5秒随机跳跃
+  const flashTimes = 6; // 6次高亮闪烁
+  let flashCount = 0;
+  const flashInterval = setInterval(() => {
+    slots.forEach(s => s.classList.remove("highlight"));
+    const idx = Math.floor(Math.random() * 8);
+    slots[idx].classList.add("highlight");
+    flashCount++;
+    if (flashCount >= flashTimes) clearInterval(flashInterval);
+  }, 250);
 
+  // 延迟 1.5秒后决定结果
   setTimeout(() => {
     slots.forEach(s => s.classList.remove("highlight"));
-
     let hitChance = bullets / 8;
     let roll = Math.random();
 
     if (roll < hitChance) {
-      // 击中
+      // 成功开火
       lives--;
       renderLife();
-      showMessage("💥 爆炸！抱歉，你好像有点鼠了💥", "red");
+      showMessage("💥 爆炸！抱歉，你好像有点鼠了", "red");
       setTimeout(ejectAnimation, 1000);
     } else if (Math.random() < 0.08) {
       // 卡弹
-      showMessage("🔧 卡弹！这才是！运气王！🔧", "yellow");
+      showMessage("🔧 卡弹！这才是！运气王！", "yellow");
       setTimeout(() => { bullets = 0; updateAmmo(); }, 1000);
     } else {
       // 空枪
-      showMessage("😎 哟，运气不错嘛😎", "lightgreen");
+      showMessage("😎 哟，运气不错嘛", "lightgreen");
     }
 
     if (lives <= 0) {
@@ -123,7 +141,7 @@ document.getElementById("fire").onclick = () => {
   }, 1500);
 };
 
-// 退弹
+// 退弹按钮
 document.getElementById("eject").onclick = () => {
   tryRestoreLife();
   if (bullets > 0) {
@@ -134,7 +152,7 @@ document.getElementById("eject").onclick = () => {
   }
 };
 
-// 恢复生命值按钮
+// 恢复生命值
 document.getElementById("restoreLife").onclick = () => {
   lives = 8;
   renderLife();
