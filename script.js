@@ -48,14 +48,14 @@ function tryRestoreLife() {
   if (Math.random() < 0.01 && lives < 8) {
     lives++;
     renderLife();
-    showMessage("恭喜触发小彩蛋，恢复一点生命值", "lightgreen");
+    showMessage("恭喜！触发小彩蛋，恢复1点生命值", "lightgreen");
   }
 }
 
 // 退弹动画
 function ejectAnimation() {
   let current = bullets;
-  let step = 1500 / current;
+  let step = 1000 / current;
   for (let i = 0; i < current; i++) {
     setTimeout(() => {
       bullets--;
@@ -106,15 +106,15 @@ document.getElementById("fire").onclick = () => {
       // 击中
       lives--;
       renderLife();
-      showMessage("💥 爆炸！抱歉，你好像有点鼠了", "red");
+      showMessage("💥 爆炸！抱歉，你好像有点鼠了💥", "red");
       setTimeout(ejectAnimation, 1000);
     } else if (Math.random() < 0.08) {
       // 卡弹
-      showMessage("🔧 卡弹！这才是！运气王！", "yellow");
+      showMessage("🔧 卡弹！这才是！运气王！🔧", "yellow");
       setTimeout(() => { bullets = 0; updateAmmo(); }, 1000);
     } else {
       // 空枪
-      showMessage("😎 哟，运气不错嘛", "lightgreen");
+      showMessage("😎 哟，运气不错嘛😎", "lightgreen");
     }
 
     if (lives <= 0) {
