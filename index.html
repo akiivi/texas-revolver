@@ -1,40 +1,45 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>德州扑克轮盘</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>德州扑克转轮小游戏</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- 生命值显示 -->
   <div id="life-container">
-    <div id="hearts"></div>
-    <button id="healBtn">恢复生命值</button>
+    <span id="life"></span>
+    <button id="restore-life">恢复生命值</button>
   </div>
 
-  <div id="roulette-container">
-    <div id="chambers">
-      <div class="chamber" data-index="0"></div>
-      <div class="chamber" data-index="1"></div>
-      <div class="chamber" data-index="2"></div>
-      <div class="chamber" data-index="3"></div>
-      <div class="chamber" data-index="4"></div>
-      <div class="chamber" data-index="5"></div>
-      <div class="chamber" data-index="6"></div>
-      <div class="chamber" data-index="7"></div>
-    </div>
+  <!-- 转轮 -->
+  <div id="revolver">
+    <div class="chamber" data-index="0"></div>
+    <div class="chamber" data-index="1"></div>
+    <div class="chamber" data-index="2"></div>
+    <div class="chamber" data-index="3"></div>
+    <div class="chamber" data-index="4"></div>
+    <div class="chamber" data-index="5"></div>
+    <div class="chamber" data-index="6"></div>
+    <div class="chamber" data-index="7"></div>
   </div>
 
+  <!-- 提示文字 -->
+  <div id="message">欢迎进入俄罗斯轮盘赌游戏！</div>
+
+  <!-- 控制按钮 -->
   <div id="controls">
-    <button id="addBulletBtn">加子弹</button>
-    <button id="allInBtn">All in</button>
-    <button id="fireBtn">开火</button>
-    <button id="ejectBtn">退弹</button>
+    <button id="add">加子弹</button>
+    <button id="all-in">All in</button>
+    <button id="fire">开火</button>
+    <button id="eject">退弹</button>
+    <button id="reset">刷新</button>
   </div>
 
-  <div id="feedback"></div>
-  <div id="signature">清欢.制作</div>
+  <!-- 制作者标注 -->
+  <div id="footer">清欢 · 制作</div>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
