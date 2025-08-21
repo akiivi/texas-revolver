@@ -21,16 +21,10 @@ initAmmo();
 
 // 初始化生命值
 function renderLife() {
-  lifeContainer.innerHTML = "";
-  for (let i = 0; i < 8; i++) {
-    if (i < lives) {
-      lifeContainer.innerHTML += `<img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="red heart">`;
-    } else {
-      lifeContainer.innerHTML += `<img src="https://cdn-icons-png.flaticon.com/512/833/833379.png" alt="gray heart">`;
-    }
-  }
+  lifeSpan.innerHTML = "❤".repeat(life) + "🤍".repeat(8 - life);
 }
 renderLife();
+
 
 // 更新子弹槽
 function updateAmmo() {
