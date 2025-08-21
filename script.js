@@ -1,4 +1,3 @@
-// 获取元素
 const ammoRow1 = document.getElementById("ammo-row1");
 const ammoRow2 = document.getElementById("ammo-row2");
 const message = document.getElementById("message");
@@ -9,48 +8,38 @@ let bullets = 0;
 const maxBullets = 8;
 let lives = 8;
 
-// 初始化子弹槽
 function initAmmo() {
   ammoRow1.innerHTML = "";
   ammoRow2.innerHTML = "";
-  for (let i = 0; i < 4; i++) {
-    ammoRow1.innerHTML += `<div class="ammo-slot" id="slot${i}"></div>`;
-    ammoRow2.innerHTML += `<div class="ammo-slot" id="slot${i+4}"></div>`;
-  }
+  for (let i = 0; i < 4; i++) ammoRow1.innerHTML += `<div class="ammo-slot" id="slot${i}"></div>`;
+  for (let i = 4; i < 8; i++) ammoRow2.innerHTML += `<div class="ammo-slot" id="slot${i}"></div>`;
 }
 initAmmo();
 
-// 初始化生命值
 function renderLife() {
   lifeContainer.innerHTML = "";
   for (let i = 0; i < 8; i++) {
-    if (i < lives) {
-      lifeContainer.innerHTML += `<img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="red heart">`;
-    } else {
-      lifeContainer.innerHTML += `<img src="https://cdn-icons-png.flaticon.com/512/833/833379.png" alt="gray heart">`;
-    }
+    if (i < lives) lifeContainer.innerHTML += `<img src="https://cdn-icons-png.flaticon.com/512/833/833472.png">`;
+    else lifeContainer.innerHTML += `<img src="https://cdn-icons-png.flaticon.com/512/833/833379.png">`;
   }
 }
 renderLife();
 
-// 更新子弹槽显示
 function updateAmmo() {
   for (let i = 0; i < 8; i++) {
     const slot = document.getElementById(`slot${i}`);
-    if (i < bullets) slot.classList.add("active");
-    else slot.classList.remove("active");
+    slot.classList.toggle("active", i < bullets);
+    slot.classList.remove("highlight");
   }
   bulletCountText.textContent = `当前子弹：${bullets}/8`;
 }
 
-// 提示信息
 function showMessage(text, color="white") {
   message.style.color = color;
   message.textContent = text;
   setTimeout(() => { message.textContent = ""; }, 1500);
 }
 
-// 小彩蛋恢复生命
 function tryRestoreLife() {
   if (Math.random() < 0.01 && lives < 8) {
     lives++;
@@ -59,9 +48,8 @@ function tryRestoreLife() {
   }
 }
 
-// 退弹动画
 function ejectAnimation() {
-  let current = bullets;
+  const current = bullets;
   if (current === 0) return;
   const step = 1500 / current;
   for (let i = 0; i < current; i++) {
@@ -93,18 +81,15 @@ document.getElementById("allIn").onclick = () => {
   showMessage("8/8，满满的！", "orange");
 };
 
-// 开火逻辑
+// 开火
 document.getElementById("fire").onclick = () => {
   tryRestoreLife();
-  if (bullets === 0) {
-    showMessage("没有子弹！", "gray");
-    return;
-  }
+  if (bullets === 0) { showMessage("没有子弹！", "gray"); return; }
 
   const slots = Array.from({length: 8}, (_, i) => document.getElementById(`slot${i}`));
-  
-  // 开火闪烁动画 1.5秒随机跳跃
-  const flashTimes = 6; // 6次高亮闪烁
+
+  // 开火闪烁动画
+  const flashTimes = 8;
   let flashCount = 0;
   const flashInterval = setInterval(() => {
     slots.forEach(s => s.classList.remove("highlight"));
@@ -112,9 +97,8 @@ document.getElementById("fire").onclick = () => {
     slots[idx].classList.add("highlight");
     flashCount++;
     if (flashCount >= flashTimes) clearInterval(flashInterval);
-  }, 250);
+  }, 200);
 
-  // 延迟 1.5秒后决定结果
   setTimeout(() => {
     slots.forEach(s => s.classList.remove("highlight"));
     let hitChance = bullets / 8;
@@ -135,13 +119,14 @@ document.getElementById("fire").onclick = () => {
       showMessage("😎 哟，运气不错嘛", "lightgreen");
     }
 
-    if (lives <= 0) {
-      showMessage("生命值清零！游戏结束", "red");
-    }
-  }, 1500);
+    if (lives <= 0) showMessage("生命值清零！游戏结束", "red");
+
+    // 恢复初始显示
+    setTimeout(updateAmmo, 1600);
+  }, 1600);
 };
 
-// 退弹按钮
+// 退弹
 document.getElementById("eject").onclick = () => {
   tryRestoreLife();
   if (bullets > 0) {
