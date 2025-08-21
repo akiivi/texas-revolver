@@ -14,17 +14,40 @@ body {
   padding: 10px;
 }
 
+.life-container-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+
+.life-btn {
+  padding: 8px 12px;
+  font-size: 4vw;
+  margin: 2px;
+  border-radius: 6px;
+  border: none;
+  background: #555;
+  color: white;
+}
+
 .life-container {
   display: flex;
   justify-content: center;
-  margin: 10px 0;
   flex-wrap: wrap;
+  margin: 0 5px;
 }
 
 .life-container img {
   width: 8vw;
   max-width: 35px;
   margin: 2px;
+}
+
+.life-text {
+  font-size: 5vw;
+  margin-left: 5px;
 }
 
 .ammo-display {
