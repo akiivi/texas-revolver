@@ -11,11 +11,11 @@
 
     <!-- 生命值 -->
     <div class="life-container-wrapper">
-      <button id="decreaseLife" class="life-btn">-</button>
+      <button id="decreaseLife" class="life-btn red-btn">-</button>
+      <button id="restoreLife" class="life-btn green-btn">恢复全部生命值</button>
+      <button id="increaseLife" class="life-btn green-btn">+</button>
       <div class="life-container" id="life"></div>
       <span id="life-text" class="life-text"></span>
-      <button id="increaseLife" class="life-btn">+</button>
-      <button id="restoreLife" class="action-btn">恢复生命值</button>
     </div>
 
     <!-- 子弹显示 -->
@@ -23,14 +23,14 @@
       <div class="ammo-row" id="ammo-row1"></div>
       <div class="ammo-row" id="ammo-row2"></div>
     </div>
-    <p id="bullet-count">当前子弹：0/8</p>
+    <p id="bullet-count" class="bullet-count">当前子弹：0/8</p>
 
     <!-- 操作按钮 -->
     <div class="controls">
-      <button id="addBullet" class="action-btn">加子弹</button>
-      <button id="allIn" class="action-btn">All In</button>
-      <button id="fire" class="action-btn">开火</button>
-      <button id="eject" class="action-btn">退弹</button>
+      <button id="addBullet" class="action-btn green-btn">加子弹</button>
+      <button id="allIn" class="action-btn green-btn">All In</button>
+      <button id="fire" class="action-btn red-btn">开火</button>
+      <button id="eject" class="action-btn yellow-btn">退弹</button>
     </div>
 
     <!-- 提示信息 -->
