@@ -1,49 +1,37 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>德州转轮小游戏</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>俄罗斯轮盘赌</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="topbar">
-    <div class="life-area">
-      <div id="hearts" aria-hidden="true"></div>
-      <button id="healBtn" class="small-btn">恢复生命值</button>
+  <div class="game-container">
+    <!-- 生命值 -->
+    <div class="life-container" id="life"></div>
+    <button id="restoreLife">恢复生命值</button>
+
+    <!-- 子弹显示 -->
+    <div class="ammo-display">
+      <div class="ammo-row" id="ammo-row1"></div>
+      <div class="ammo-row" id="ammo-row2"></div>
     </div>
-    <div class="bullet-count">子弹：<span id="bulletCount">0</span>/8</div>
+    <p id="bullet-count">当前子弹：0/8</p>
+
+    <!-- 操作按钮 -->
+    <div class="controls">
+      <button id="addBullet">加子弹</button>
+      <button id="allIn">All In</button>
+      <button id="fire">开火</button>
+      <button id="eject">退弹</button>
+    </div>
+
+    <!-- 提示信息 -->
+    <div id="message"></div>
   </div>
 
-  <main class="main">
-    <h1 class="title">德州转轮游戏</h1>
-
-    <section id="revolver" class="revolver" aria-label="弹仓">
-      <!-- 8 个格位（两行四列） -->
-      <div class="chamber" data-index="0"></div>
-      <div class="chamber" data-index="1"></div>
-      <div class="chamber" data-index="2"></div>
-      <div class="chamber" data-index="3"></div>
-      <div class="chamber" data-index="4"></div>
-      <div class="chamber" data-index="5"></div>
-      <div class="chamber" data-index="6"></div>
-      <div class="chamber" data-index="7"></div>
-    </section>
-
-    <div id="message" class="message" aria-live="polite"></div>
-
-    <div class="controls">
-      <button id="addBtn" class="btn">加子弹</button>
-      <button id="allInBtn" class="btn">All in</button>
-      <button id="fireBtn" class="btn primary">开火</button>
-      <button id="ejectBtn" class="btn warn">退弹</button>
-    </div>
-  </main>
-
-  <!-- 屏幕闪烁覆盖层（用于结果高亮）-->
-  <div id="flash" class="flash"></div>
-
-  <footer id="signature">清欢.制作</footer>
+  <p class="footer">清欢.制作</p>
 
   <script src="script.js"></script>
 </body>
