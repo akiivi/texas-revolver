@@ -201,3 +201,87 @@ body{
   .btn { min-width: 100px; padding:10px; font-size:15px; }
   .heart { width:24px; height:24px; }
 }
+
+body {
+  font-family: Arial, sans-serif;
+  background: #222;
+  color: white;
+  text-align: center;
+}
+
+.game-container {
+  max-width: 400px;
+  margin: auto;
+  padding: 10px;
+}
+
+.life-container {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.life-container img {
+  width: 25px;
+  margin: 2px;
+}
+
+.ammo-display {
+  margin: 15px 0;
+}
+
+.ammo-row {
+  display: flex;
+  justify-content: center;
+}
+
+.ammo-slot {
+  width: 30px;
+  height: 30px;
+  margin: 3px;
+  border-radius: 50%;
+  background: gray;
+  display: inline-block;
+}
+
+.ammo-slot.active {
+  background: white;
+}
+
+.ammo-slot.highlight {
+  border: 2px solid red;
+  animation: blink 0.2s infinite;
+}
+
+.controls button {
+  margin: 5px;
+  padding: 10px 15px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background: #444;
+  color: white;
+  transition: transform 0.2s;
+}
+
+.controls button:active {
+  transform: scale(1.1);
+}
+
+#message {
+  margin: 20px 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.footer {
+  margin-top: 20px;
+  font-size: 14px;
+  color: gray;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.3;
+  }
+}
