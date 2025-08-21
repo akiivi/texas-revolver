@@ -123,7 +123,6 @@ document.getElementById("fire").onclick = () => {
 
     if (lives <= 0) showMessage("生命值清零！游戏结束", "red");
 
-    // 恢复初始显示
     setTimeout(updateAmmo, 1600);
   }, 1600);
 };
